@@ -45,7 +45,6 @@ def get_word_features(full_string):
 
 # Valid sentences are defined as sentences with at least 5 'alpha' tokens (no punctuation, numbers or other symbols).
 
-
 def get_sentence_features(full_string):
     total_number_of_valid_sentences = 0
     total_words_in_sentences = 0
@@ -75,6 +74,26 @@ def get_readability_scores(full_string):
     reading_dict['LIX'] = rd.LIX()
     reading_dict['RIX'] = rd.RIX()
     return reading_dict
+
+
+# Quantify the number of times that different expressions/words appear in the text.
+def get_precence_of_terms(list_of_terms, key_words, full_string):
+    tokenized_string_full = nltk.word_tokenize(full_string)
+    tokenized_string = [word.lower() for word in tokenized_string_full if word.isalpha()]
+    number_of_words = len(tokenized_string)
+    term_appearances = {'total_term_appearance': 0}
+    for whole_term_index in range(len(list_of_terms)):
+        term_appearances[key_words[whole_term_index]] = 0
+    for word_index in range(len(tokenized_string)):
+        for whole_term_index in range(len(list_of_terms)):
+            whole_term_length = len(list_of_terms[whole_term_index])
+            if tokenized_string[word_index:word_index + whole_term_length] == list_of_terms[whole_term_index]:
+                term_appearances[key_words[whole_term_index]] += 1
+                term_appearances['total_term_appearance'] += 1
+    for whole_term_index in range(len(list_of_terms)):
+        term_appearances[key_words[whole_term_index]] = term_appearances[key_words[whole_term_index]] / float((number_of_words + 1 - len(list_of_terms[whole_term_index])))
+    term_appearances['total_term_appearance_normalized'] = term_appearances['total_term_appearance'] / float(number_of_words)
+    return term_appearances
 
 
 
