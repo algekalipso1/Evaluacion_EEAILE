@@ -89,30 +89,57 @@ t.test(d2m13$total_term_appearance_normalized.x, d2m13$total_term_appearance_nor
 term_sums <- colSums(d2m13[,c(18:308, 325:615)])
 term_sums <- term_sums/dim(d2m13)[1]
 d2m_terms <- rbind(term_sums[1:291], term_sums[292:length(term_sums)])
-d2m_terms_ratio <- d2m_terms[1,] / (d2m_terms[2,] + 0.0000000001)
+d2m_terms_ratio <- (d2m_terms[2,] + 0.0001) / (d2m_terms[1,]+ 0.0001)
 d2m_terms <- rbind(d2m_terms, d2m_terms_ratio)
 comparison_table_d2 <- t(d2m_terms)
 colnames(comparison_table_d2) <- c("mod1", "mod3","ratio")
-comparison_table_d2[order(comparison_table_d2[,2]),]
-write.csv(comparison_table_d2m, file = "../palabras_clave/comparison_table_d2m.csv")
+comparison_table_d2 <- comparison_table_d2[order(comparison_table_d2[,3], decreasing = TRUE),]
+write.csv(comparison_table_d2, file = "../palabras_clave/cambio_en_frecuencias_g2.csv")
 
 
 d3term_sums <- colSums(d3m13[,c(18:308, 325:615)])
 d3term_sums <- d3term_sums/dim(d3m13)[1]
 d3_terms <- rbind(d3term_sums[1:291], d3term_sums[292:length(term_sums)])
-d3_terms_ratio <- d3_terms[1,] / (d3_terms[2,] + 0.0000000001)
+#d3_terms_ratio <- d3_terms[1,] / (d3_terms[2,] + 0.0000000001)
+d3_terms_ratio <-  (d3_terms[2,] + 0.0001) /  (d3_terms[1,] + 0.0001)
 d3_terms <- rbind(d3_terms, d3_terms_ratio)
 comparison_table_d3 <- t(d3_terms)
 colnames(comparison_table_d3) <- c("mod1", "mod3","ratio")
-comparison_table_d3[order(comparison_table_d3[,2]),]
-write.csv(comparison_table_d3, file = "../palabras_clave/comparison_table_d3.csv")
+comparison_table_d3 <- comparison_table_d3[order(comparison_table_d3[,3], decreasing = TRUE),]
+write.csv(comparison_table_d3, file = "../palabras_clave/cambio_en_frecuencias_g3.csv")
+
+
+
+# At least one appearance
+term_sums <- colSums(d2m13[,c(18:308, 325:615)] > 0)
+term_sums <- term_sums/dim(d2m13)[1]
+d2m_terms <- rbind(term_sums[1:291], term_sums[292:length(term_sums)])
+d2m_terms_ratio <- (d2m_terms[2,] + 0.0001) / (d2m_terms[1,]+ 0.0001)
+d2m_terms <- rbind(d2m_terms, d2m_terms_ratio)
+comparison_table_d2 <- t(d2m_terms)
+colnames(comparison_table_d2) <- c("mod1", "mod3","ratio")
+comparison_table_d2 <- comparison_table_d2[order(comparison_table_d2[,3], decreasing = TRUE),]
+write.csv(comparison_table_d2, file = "../palabras_clave/proporcion_de_proyectos_con_terminos_g2.csv")
+
+
+d3term_sums <- colSums(d3m13[,c(18:308, 325:615)] > 0)
+d3term_sums <- d3term_sums/dim(d3m13)[1]
+d3_terms <- rbind(d3term_sums[1:291], d3term_sums[292:length(term_sums)])
+#d3_terms_ratio <- d3_terms[1,] / (d3_terms[2,] + 0.0000000001)
+d3_terms_ratio <-  (d3_terms[2,] + 0.0001) /  (d3_terms[1,] + 0.0001)
+d3_terms <- rbind(d3_terms, d3_terms_ratio)
+comparison_table_d3 <- t(d3_terms)
+colnames(comparison_table_d3) <- c("mod1", "mod3","ratio")
+comparison_table_d3 <- comparison_table_d3[order(comparison_table_d3[,3], decreasing = TRUE),]
+write.csv(comparison_table_d3, file = "../palabras_clave/proporcion_de_proyectos_con_terminos_g3.csv")
+
 
 # Factor analysis on Terms
 
 just_term_freqs <- d[,20:306]
 just_term_freqs = just_term_freqs[,colSums(just_term_freqs) > 0.001]
 
-terms_fit <- factanal(just_term_freqs, 5, rotation="varimax", scores="regression")
+terms_fit <- factanal(just_term_freqs, 2, rotation="varimax", scores="regression")
 print(terms_fit, digits=2, cutoff=.2, sort=TRUE)
 
 # plot factor 1 by factor 2

@@ -1,5 +1,8 @@
 #setwd("~/Documents/Person/language_improvement_analysis/gen1")
 setwd("~/Documents/hard_drive/Personal/repessss/language_improvement_analysis/gen3")
+setwd("~/Documents/hard_drive/Personal/repessss/language_improvement_analysis/gen1")
+
+
 
 
 d_stat = read.csv("gen1_dat.csv") # Nota: esta es gen1. "analysis of features" investiga gen2 y gen3.
@@ -104,6 +107,14 @@ d_stat3_subset <- d_stat3_subset[1:44,]
 d_stat3_subset$promedio <- as.numeric.factor(d_stat3_subset$Calificación.de.actas.modulo.uno) + as.numeric.factor(d_stat3_subset$Calificación.de.actas.modulo.dos) + as.numeric.factor(d_stat3_subset$Calificación.de.actas.modulo.tres)
 
 
+d_stat3_subset$numeric_tutor <- as.factor(as.numeric(d_stat3_subset$Tutor))
 summary(lm(promedio ~ genero, data = d_stat3_subset))
 summary(lm(promedio ~ genero + Nivel, data = d_stat3_subset))
-summary(lm(promedio ~ genero + Tutor, data = d_stat3_subset))
+summary(lm(promedio ~ genero + numeric_tutor, data = d_stat3_subset))
+
+
+
+
+
+
+
